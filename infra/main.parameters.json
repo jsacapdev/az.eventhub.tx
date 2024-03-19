@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "environmentName": {
+        "value": "${AZURE_ENV_NAME}"
+      },
+      "location": {
+        "value": "${AZURE_LOCATION}"
+      },
+      "productName": {
+        "value": "${PRODUCT_NAME}"
+      },
+      "principalId": {
+        "value": "${AZURE_PRINCIPAL_ID}"
+      },
+      "sqlAdminPassword": {
+        "value": "${SQL_ADMIN_PASSWORD}"
+      },
+      "appUserPassword": {
+        "value": "${APP_USER_PASSWORD}"
+      },
+      "adoBasicAuthToken": {
+        "value": "${ADO_BASIC_AUTH_TOKEN}"
+      },
+      "sonarBasicAuthToken": {
+        "value": "${SONAR_BASIC_AUTH_TOKEN}"
+      }
+    }
+}
