@@ -38,3 +38,10 @@ resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2023-01-01-preview' =
     partitionCount: 1
   }
 }
+
+resource consumergroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2022-10-01-preview' = {
+  parent: eventHub
+  name: 'cg-azd5-dev-001'
+  properties: {
+  }
+}
