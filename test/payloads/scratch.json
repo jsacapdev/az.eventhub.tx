@@ -1,0 +1,15 @@
+{
+	"PassRate": 0.0,
+	"TestSK": 625634875,
+	"UpdatedDate": "2024-02-28T23:44:59.4446596Z",
+	"ProjectSK": "303b7da1-1c89-467e-9730-12849c222832",
+	"FlakyCount": 0,
+	"NotImpactedCount": 0,
+	"NotExecutedCount": 0,
+	"FailedCount": 1,
+	"PassedCount": 0,
+	"TotalCount": 1,
+	"ServiceName": "Service",
+	"TestPipelineName": "Smoke Test",
+	"id": "6d89eae237e3fb4c6ebe6c32ac47ca84dafcaafd6ba5189ee261e4aeb87b002b"
+}
