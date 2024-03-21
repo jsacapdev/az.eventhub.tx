@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.Tx.Ingest.Processor", "Azd.Tx.Ingest.Processor\Azd.Tx.Ingest.Processor.csproj", "{B2A3FBFC-879F-4250-AA8C-17D5150FACC5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.RxTx.Processor", "Azd.RxTx.Processor\Azd.RxTx.Processor.csproj", "{80AF5D6B-36E0-4CC3-BBF5-50E98E880917}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DA16E877-2D08-4158-9F5E-A63A691DA259}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2DBA5857-1FCC-4FC9-981F-ACB7254AE6CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.RxTx.Processor.Tests", "test\Azd.RxTx.Processor.Tests\Azd.RxTx.Processor.Tests.csproj", "{D988123E-B855-44C9-9E8D-A5CB2CD1F823}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.RxTx.Processor.Tests", "tests\Azd.RxTx.Processor.Tests\Azd.RxTx.Processor.Tests.csproj", "{5C14AB51-50E7-4A6B-B07F-C011A6ED09A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,20 +18,16 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B2A3FBFC-879F-4250-AA8C-17D5150FACC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2A3FBFC-879F-4250-AA8C-17D5150FACC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2A3FBFC-879F-4250-AA8C-17D5150FACC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2A3FBFC-879F-4250-AA8C-17D5150FACC5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{80AF5D6B-36E0-4CC3-BBF5-50E98E880917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{80AF5D6B-36E0-4CC3-BBF5-50E98E880917}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80AF5D6B-36E0-4CC3-BBF5-50E98E880917}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80AF5D6B-36E0-4CC3-BBF5-50E98E880917}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D988123E-B855-44C9-9E8D-A5CB2CD1F823}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D988123E-B855-44C9-9E8D-A5CB2CD1F823}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D988123E-B855-44C9-9E8D-A5CB2CD1F823}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D988123E-B855-44C9-9E8D-A5CB2CD1F823}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C14AB51-50E7-4A6B-B07F-C011A6ED09A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C14AB51-50E7-4A6B-B07F-C011A6ED09A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C14AB51-50E7-4A6B-B07F-C011A6ED09A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C14AB51-50E7-4A6B-B07F-C011A6ED09A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{D988123E-B855-44C9-9E8D-A5CB2CD1F823} = {DA16E877-2D08-4158-9F5E-A63A691DA259}
+		{5C14AB51-50E7-4A6B-B07F-C011A6ED09A8} = {2DBA5857-1FCC-4FC9-981F-ACB7254AE6CE}
 	EndGlobalSection
 EndGlobal
