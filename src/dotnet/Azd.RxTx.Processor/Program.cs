@@ -11,12 +11,6 @@ public class Program
 
         builder.Services.AddSingleton<IMessageProcessor, ServiceBusMessageProcessor>();
 
-        foreach (var def in Environment.GetEnvironmentVariables())
-        { 
-            Console.WriteLine(def);
-
-        }
-
         builder.Services.AddAzureClients(clientBuilder =>
         {
             clientBuilder.AddServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnectionString"));
