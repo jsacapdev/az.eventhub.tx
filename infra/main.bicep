@@ -28,6 +28,9 @@ var applicationInsightsDashboardName = '${abbrs.portalDashboards}${productName}-
 var eventHubNamespaceName = '${abbrs.eventHubNamespaces}${productName}-${environmentName}-001'
 var eventHubName = '${abbrs.eventHubNamespacesEventHubs}${productName}-${environmentName}-001'
 
+var serviceBusNamespaceName = '${abbrs.serviceBusNamespaces}${productName}-${environmentName}-001'
+var serviceBusNamespaceTopicName = '${abbrs.serviceBusNamespacesTopics}${productName}-${environmentName}-001'
+
 module monitoring './core/monitor/monitoring.bicep' = {
   name: 'monitoring'
   params: {
@@ -36,6 +39,16 @@ module monitoring './core/monitor/monitoring.bicep' = {
     tags: tags
     applicationInsightsName: applicationInsightsName
     applicationInsightsDashboardName: applicationInsightsDashboardName
+  }
+}
+
+module servicebus './core/messaging/servicebus.bicep' = {
+  name: 'servicebus'
+  params: {
+    location: location
+    tags: tags
+    serviceBusNamespaceName: serviceBusNamespaceName
+    serviceBusTopicName: serviceBusNamespaceTopicName
   }
 }
 
