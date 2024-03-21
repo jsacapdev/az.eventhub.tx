@@ -17,6 +17,8 @@ public class Worker : BackgroundService
 
     public override Task StartAsync(CancellationToken cancellationToken)
     {
+        _processor.Initialize();
+
         _logger.LogInformation("Worker started at: {time}", DateTimeOffset.Now);
 
         return base.StartAsync(cancellationToken);
@@ -30,7 +32,7 @@ public class Worker : BackgroundService
         {
             if (_logger.IsEnabled(LogLevel.Information))
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogDebug("Worker running at: {time}", DateTimeOffset.Now);
             }
             await Task.Delay(1000, stoppingToken);
         }

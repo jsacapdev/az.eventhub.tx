@@ -13,10 +13,18 @@ A proof of concept as to different ways to upload at scale to Event Hub.
 |Coverage|[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jsacapdev_az.eventhub.tx&metric=coverage)](https://sonarcloud.io/summary/new_code?id=jsacapdev_az.eventhub.tx)|
 |Duplications (%)|[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=jsacapdev_az.eventhub.tx&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=jsacapdev_az.eventhub.tx)|
 
-## Command Scratch Space
+## Provision Resources using the Developer CLI
 
 `azd provision --no-state --no-prompt`
 
 `azd up --no-prompt`
 
+## Scaffold a new Project
+
 `dotnet new worker -n Azd.Tx.Ingest.Processor --use-program-main`
+
+## Run a worker on the command line
+
+`Get-ChildItem Env:\`
+
+`$env:ServiceBusConnectionString = ""`
