@@ -23,7 +23,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Install dependencies
-        run: dotnet restore ${{ vars.SOLUTION }}
+        run: dotnet restore src/dotnet/Azd.Tx.sln
 
       - name: Build
         run: dotnet build ${{ vars.SOLUTION }}
