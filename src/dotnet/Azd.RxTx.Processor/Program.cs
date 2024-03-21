@@ -14,6 +14,8 @@ public class Program
         builder.Services.AddAzureClients(clientBuilder =>
         {
             clientBuilder.AddServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnectionString"));
+
+            clientBuilder.AddEventHubProducerClient(Environment.GetEnvironmentVariable("EventHubConnectionString"));
         });
 
         var host = builder.Build();
