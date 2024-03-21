@@ -4,22 +4,22 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 {
     private readonly ILogger<ServiceBusMessageProcessor> _logger;
 
-    public ServiceBusMessageProcessor(ILogger<ServiceBusMessageProcessor> logger)
+    public ServiceBusMessageProcessor(ILogger<ServiceBusMessageProcessor> logger, IHostApplicationLifetime hostApplicationLifetime)
     {
         _logger = logger;
+
+        hostApplicationLifetime.ApplicationStopped.Register(() => StopProcessing());
     }
 
     public async Task StartProcessingAsync()
     {
-        await Task.Run(() => {});
+        await Task.Run(() => { });
 
         _logger.LogInformation("ServiceBusMessageProcessor started processing at: {time}", DateTimeOffset.Now);
     }
 
-    public async Task StopProcessingAsync()
+    public void StopProcessing()
     {
-        await Task.Run(() => {});
-
         _logger.LogInformation("ServiceBusMessageProcessor stopped processing at: {time}", DateTimeOffset.Now);
     }
 }
