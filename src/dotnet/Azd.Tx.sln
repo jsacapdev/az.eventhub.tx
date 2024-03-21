@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.Tx.Ingest.Processor", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.RxTx.Processor", "Azd.RxTx.Processor\Azd.RxTx.Processor.csproj", "{80AF5D6B-36E0-4CC3-BBF5-50E98E880917}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DA16E877-2D08-4158-9F5E-A63A691DA259}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.RxTx.Processor.Tests", "test\Azd.RxTx.Processor.Tests\Azd.RxTx.Processor.Tests.csproj", "{D988123E-B855-44C9-9E8D-A5CB2CD1F823}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,12 @@ Global
 		{80AF5D6B-36E0-4CC3-BBF5-50E98E880917}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80AF5D6B-36E0-4CC3-BBF5-50E98E880917}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80AF5D6B-36E0-4CC3-BBF5-50E98E880917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D988123E-B855-44C9-9E8D-A5CB2CD1F823}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D988123E-B855-44C9-9E8D-A5CB2CD1F823}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D988123E-B855-44C9-9E8D-A5CB2CD1F823}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D988123E-B855-44C9-9E8D-A5CB2CD1F823}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D988123E-B855-44C9-9E8D-A5CB2CD1F823} = {DA16E877-2D08-4158-9F5E-A63A691DA259}
 	EndGlobalSection
 EndGlobal
