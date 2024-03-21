@@ -1,8 +1,6 @@
 namespace Azd.RxTx.Processor;
 
-public interface IMessageForwarder<T>
+public interface IMessageSender<T>
 {
-    void Initialize();
-
     Task SendMessagesAsync(IList<T> messages);
 }

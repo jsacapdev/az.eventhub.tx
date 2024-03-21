@@ -28,3 +28,7 @@ A proof of concept as to different ways to upload at scale to Event Hub.
 `Get-ChildItem Env:\`
 
 `$env:ServiceBusConnectionString = ""`
+
+`$env:EventHubConnectionString = ""`
+
+`$env:EventHubName = "evh-azd5-dev-001"`

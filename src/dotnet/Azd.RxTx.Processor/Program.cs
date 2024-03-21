@@ -11,11 +11,14 @@ public class Program
 
         builder.Services.AddSingleton<IMessageProcessor, ServiceBusMessageProcessor>();
 
+        builder.Services.AddSingleton<IMessageSender<string>, EventHubMessageSender>();
+
         builder.Services.AddAzureClients(clientBuilder =>
         {
             clientBuilder.AddServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnectionString"));
 
-            clientBuilder.AddEventHubProducerClient(Environment.GetEnvironmentVariable("EventHubConnectionString"));
+            clientBuilder.AddEventHubProducerClient(Environment.GetEnvironmentVariable("EventHubConnectionString"), 
+                                                    Environment.GetEnvironmentVariable("EventHubName"));
         });
 
         var host = builder.Build();
