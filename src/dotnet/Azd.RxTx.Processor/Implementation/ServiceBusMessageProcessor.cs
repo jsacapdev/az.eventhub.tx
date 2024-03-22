@@ -1,6 +1,5 @@
 using Azure.Messaging.ServiceBus;
 using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.DataContracts;
 
 namespace Azd.RxTx.Processor;
 
@@ -33,7 +32,7 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
     public void Initialize()
     {
-        _serviceBusProcessor.ProcessMessageAsync += ServiceBusMessageHandler;
+        _serviceBusProcessor.ProcessMessageAsync += ServiceBusMessageHandlerInParallel;
 
         _serviceBusProcessor.ProcessErrorAsync += ServiceBusErrorHandler;
 
@@ -47,6 +46,28 @@ public class ServiceBusMessageProcessor : IMessageProcessor
         string body = args.Message.Body.ToString();
 
         await _messageForwarder.SendMessagesAsync([body]);
+
+        // complete (and so delete) the message. 
+        await args.CompleteMessageAsync(args.Message);
+    }
+
+    private async Task ServiceBusMessageHandlerInParallel(ProcessMessageEventArgs args)
+    {
+        _telemetryClient.TrackEvent(_logger, "ServiceBusMessageProcessor received new message for processing");
+
+        string body = args.Message.Body.ToString();
+
+        List<string> items = [];
+
+        for (int i = 0; i < 99; i++)
+        {
+            items.Add(body);
+        }
+
+        await Parallel.ForAsync(0, 10, async (i, state) =>
+        {
+            await _messageForwarder.SendMessagesAsync(items);
+        });
 
         // complete (and so delete) the message. 
         await args.CompleteMessageAsync(args.Message);
