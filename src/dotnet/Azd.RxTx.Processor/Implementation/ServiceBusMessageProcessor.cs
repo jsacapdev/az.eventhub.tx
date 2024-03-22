@@ -1,4 +1,6 @@
 using Azure.Messaging.ServiceBus;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 
 namespace Azd.RxTx.Processor;
 
@@ -8,19 +10,23 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
     private readonly IMessageSender<string> _messageForwarder;
 
-
     private readonly ServiceBusProcessor _serviceBusProcessor;
+
+    private readonly TelemetryClient _telemetryClient;
 
     public ServiceBusMessageProcessor(ILogger<ServiceBusMessageProcessor> logger,
                                       IMessageSender<string> messageForwarder,
                                       IHostApplicationLifetime hostApplicationLifetime,
-                                      ServiceBusClient serviceBusClient)
+                                      ServiceBusClient serviceBusClient,
+                                      TelemetryClient telemetryClient)
     {
         _logger = logger;
 
         _messageForwarder = messageForwarder;
 
         _serviceBusProcessor = serviceBusClient.CreateProcessor("sbt-azd5-dev-001", "sub-azd5-dev-001");
+
+        _telemetryClient = telemetryClient;
 
         hostApplicationLifetime.ApplicationStopped.Register(async () => await StopProcessing());
     }
@@ -36,8 +42,7 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
     private async Task ServiceBusMessageHandler(ProcessMessageEventArgs args)
     {
-        _logger.LogInformation("ServiceBusMessageProcessor received new message for processing at: {time}",
-                              DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'", System.Globalization.CultureInfo.InvariantCulture));
+        _telemetryClient.TrackEvent(_logger, "ServiceBusMessageProcessor received new message for processing");
 
         string body = args.Message.Body.ToString();
 

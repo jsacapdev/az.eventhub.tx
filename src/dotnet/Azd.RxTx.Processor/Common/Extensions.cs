@@ -1,9 +1,28 @@
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
+
 namespace Azd.RxTx.Processor;
 
 public static class Extensions
 {
-    public static void LogTimestampedInformation<T>(this ILogger<T> logger, string message, params object?[] args)
+    public static void TrackEvent(this TelemetryClient telemetryClient, ILogger logger, string message, params object?[] args)
     {
-        logger.LogInformation(message, args, DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'", System.Globalization.CultureInfo.InvariantCulture));
+        using (telemetryClient.StartOperation<RequestTelemetry>("operation"))
+        {
+            telemetryClient.TrackEvent(message);
+        }
+
+        logger.LogInformation(message);
     }
+
+    public static void TrackTrace(this TelemetryClient telemetryClient, ILogger logger, string message, params object?[] args)
+    {
+        using (telemetryClient.StartOperation<RequestTelemetry>("operation"))
+        {
+            telemetryClient.TrackTrace(message);
+        }
+
+        logger.LogInformation(message);
+    }
+
 }

@@ -1,6 +1,7 @@
 using System.Text;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
+using Microsoft.ApplicationInsights;
 
 namespace Azd.RxTx.Processor;
 
@@ -10,13 +11,18 @@ public class EventHubMessageSender : IMessageSender<string>
 
     private readonly EventHubProducerClient _eventHubProducerClient;
 
+    private readonly TelemetryClient _telemetryClient;
+
     public EventHubMessageSender(ILogger<EventHubMessageSender> logger,
                                     IHostApplicationLifetime hostApplicationLifetime,
-                                    EventHubProducerClient producerClient)
+                                    EventHubProducerClient producerClient,
+                                    TelemetryClient telemetryClient)
     {
         _logger = logger;
 
         _eventHubProducerClient = producerClient;
+
+        _telemetryClient = telemetryClient;
 
         hostApplicationLifetime.ApplicationStopped.Register(async () => await StopSending());
     }
@@ -36,9 +42,7 @@ public class EventHubMessageSender : IMessageSender<string>
 
         await _eventHubProducerClient.SendAsync(eventBatch);
 
-        _logger.LogInformation("EventHubMessageForwarder completed sending a batch of {count} events at: {time}", 
-                               messages.Count, 
-                               DateTime.UtcNow.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'", System.Globalization.CultureInfo.InvariantCulture));
+        _telemetryClient.TrackEvent(_logger, $"EventHubMessageForwarder completed sending a batch of {messages.Count} events");
     }
 
     private async Task StopSending()

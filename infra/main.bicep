@@ -14,12 +14,18 @@ param productName string
 @description('Primary location for all resources')
 param location string
 
+@secure()
+@description('Id of the user or app to assign application roles')
+param principalId string
+
 var abbrs = loadJsonContent('./abbreviations.json')
 
 // Tags that should be applied to all resources.
 var tags = {
   'azd-env-name': environmentName
 }
+
+var keyVaultName = '${abbrs.keyVaultVaults}${productName}-${environmentName}-001'
 
 var logAnalyticsName = '${abbrs.operationalInsightsWorkspaces}${productName}-${environmentName}-001'
 var applicationInsightsName = '${abbrs.insightsComponents}${productName}-${environmentName}-001'
@@ -39,6 +45,17 @@ module monitoring './core/monitor/monitoring.bicep' = {
     tags: tags
     applicationInsightsName: applicationInsightsName
     applicationInsightsDashboardName: applicationInsightsDashboardName
+  }
+}
+
+module keyVault './core/security/keyvault.bicep' = {
+  name: 'keyvault'
+  params: {
+    name: keyVaultName
+    location: location
+    tags: tags
+    principalId: principalId
+    applicationInsightsConnectionString: monitoring.outputs.applicationInsightsConnectionString
   }
 }
 
