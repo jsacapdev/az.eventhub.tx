@@ -32,3 +32,13 @@ A proof of concept as to different ways to upload at scale to Event Hub.
 `$env:EventHubConnectionString = ""`
 
 `$env:EventHubName = "evh-azd5-dev-001"`
+
+`$env:APPLICATIONINSIGHTS_CONNECTION_STRING = ""`
+
+## Publish the Windows Service
+
+`dotnet publish -o d:/Azd.RxTx.Processor/`
+
+`sc.exe create "Azd RxTx Service" binpath="C:\Program Files\Azd.RxTx.Processor\Azd.RxTx.Processor.exe"`
+
+`sc.exe delete "Azd RxTx Service"`

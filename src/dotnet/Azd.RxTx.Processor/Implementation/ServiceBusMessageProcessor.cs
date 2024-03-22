@@ -36,7 +36,7 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
         _serviceBusProcessor.ProcessErrorAsync += ServiceBusErrorHandler;
 
-        _logger.LogInformation("ServiceBusMessageProcessor completed Initialization at: {time}", DateTimeOffset.Now);
+        _telemetryClient.TrackEvent("ServiceBusMessageProcessor completed Initialization");
     }
 
     private async Task ServiceBusMessageHandler(ProcessMessageEventArgs args)
@@ -93,6 +93,6 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
         await _serviceBusProcessor.DisposeAsync();
 
-        _logger.LogInformation("ServiceBusMessageProcessor stopped processing at: {time}", DateTimeOffset.Now);
+        _telemetryClient.TrackEvent("ServiceBusMessageProcessor stopped processing");
     }
 }

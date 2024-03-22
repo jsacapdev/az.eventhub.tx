@@ -7,6 +7,12 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = Host.CreateApplicationBuilder(args);
+        
+        builder.Services.AddWindowsService(options =>
+        {
+            options.ServiceName = "RxTx Service";
+        });
+
         builder.Services.AddHostedService<Worker>();
         builder.Services.AddApplicationInsightsTelemetryWorkerService();
 
@@ -18,7 +24,7 @@ public class Program
         {
             clientBuilder.AddServiceBusClient(Environment.GetEnvironmentVariable("ServiceBusConnectionString"));
 
-            clientBuilder.AddEventHubProducerClient(Environment.GetEnvironmentVariable("EventHubConnectionString"), 
+            clientBuilder.AddEventHubProducerClient(Environment.GetEnvironmentVariable("EventHubConnectionString"),
                                                     Environment.GetEnvironmentVariable("EventHubName"));
         });
 
