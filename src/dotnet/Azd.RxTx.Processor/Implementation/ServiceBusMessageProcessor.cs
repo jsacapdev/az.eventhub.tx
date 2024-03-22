@@ -32,7 +32,7 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
     public void Initialize()
     {
-        _serviceBusProcessor.ProcessMessageAsync += ServiceBusMessageHandlerInParallel;
+        _serviceBusProcessor.ProcessMessageAsync += ServiceBusMessageHandler;
 
         _serviceBusProcessor.ProcessErrorAsync += ServiceBusErrorHandler;
 
@@ -75,7 +75,7 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
     private Task ServiceBusErrorHandler(ProcessErrorEventArgs args)
     {
-        _logger.LogError(args.Exception.ToString());
+        _telemetryClient.TrackException(_logger, args.Exception);
 
         return Task.CompletedTask;
     }
