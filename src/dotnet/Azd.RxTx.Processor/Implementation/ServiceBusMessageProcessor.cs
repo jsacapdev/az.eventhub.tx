@@ -59,11 +59,13 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
         List<string> items = [];
 
+        // create 99 versions of the item that came down in the message
         for (int i = 0; i < 99; i++)
         {
             items.Add(body);
         }
 
+        // and start 10 threads, each uploading 99 items in batch (1 x 99 x 10 = 990)
         await Parallel.ForAsync(0, 10, async (i, state) =>
         {
             await _messageForwarder.SendMessagesAsync(items);
