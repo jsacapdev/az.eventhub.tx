@@ -32,7 +32,7 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
     public void Initialize()
     {
-        _serviceBusProcessor.ProcessMessageAsync += ServiceBusMessageHandler;
+        _serviceBusProcessor.ProcessMessageAsync += ServiceBusMessageHandlerInParallel;
 
         _serviceBusProcessor.ProcessErrorAsync += ServiceBusErrorHandler;
 
