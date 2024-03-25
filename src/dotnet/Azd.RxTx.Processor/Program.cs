@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Azure;
+using Serilog;
 
 namespace Azd.RxTx.Processor;
 
@@ -12,6 +13,11 @@ public class Program
         {
             options.ServiceName = "RxTx Service";
         });
+
+        builder.Services.AddSerilog(config =>
+        {
+            config.ReadFrom.Configuration(builder.Configuration);
+        });        
 
         builder.Services.AddHostedService<Worker>();
         builder.Services.AddApplicationInsightsTelemetryWorkerService();
