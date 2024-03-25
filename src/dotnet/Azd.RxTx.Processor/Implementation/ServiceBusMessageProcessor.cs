@@ -36,7 +36,7 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
         _serviceBusProcessor.ProcessErrorAsync += ServiceBusErrorHandler;
 
-        _telemetryClient.TrackEvent("ServiceBusMessageProcessor completed Initialization");
+        _logger.LogInformation("ServiceBusMessageProcessor completed Initialization at: {time}", DateTimeOffset.Now);
     }
 
     private async Task ServiceBusMessageHandler(ProcessMessageEventArgs args)
@@ -53,7 +53,7 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
     private async Task ServiceBusMessageHandlerInParallel(ProcessMessageEventArgs args)
     {
-        _telemetryClient.TrackEvent(_logger, "ServiceBusMessageProcessor received new message for processing");
+        _telemetryClient.TrackTrace(_logger, "ServiceBusMessageProcessor received new message for processing");
 
         string body = args.Message.Body.ToString();
 
@@ -73,6 +73,8 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
         // complete (and so delete) the message. 
         await args.CompleteMessageAsync(args.Message);
+
+        _telemetryClient.TrackTrace(_logger, "ServiceBusMessageProcessor completed processing batch for processing");
     }
 
     private Task ServiceBusErrorHandler(ProcessErrorEventArgs args)
@@ -95,6 +97,6 @@ public class ServiceBusMessageProcessor : IMessageProcessor
 
         await _serviceBusProcessor.DisposeAsync();
 
-        _telemetryClient.TrackEvent("ServiceBusMessageProcessor stopped processing");
+        _logger.LogInformation("ServiceBusMessageProcessor stopped processing at: {time}", DateTimeOffset.Now);
     }
 }

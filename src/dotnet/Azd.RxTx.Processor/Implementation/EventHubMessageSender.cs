@@ -41,8 +41,6 @@ public class EventHubMessageSender : IMessageSender<string>
         }
 
         await _eventHubProducerClient.SendAsync(eventBatch);
-
-        _telemetryClient.TrackEvent(_logger, $"EventHubMessageForwarder completed sending a batch of {messages.Count} events");
     }
 
     private async Task StopSending()
