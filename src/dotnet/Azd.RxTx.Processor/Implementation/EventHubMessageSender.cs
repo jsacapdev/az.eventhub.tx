@@ -14,9 +14,9 @@ public class EventHubMessageSender : IMessageSender<string>
     private readonly TelemetryClient _telemetryClient;
 
     public EventHubMessageSender(ILogger<EventHubMessageSender> logger,
-                                    IHostApplicationLifetime hostApplicationLifetime,
-                                    EventHubProducerClient producerClient,
-                                    TelemetryClient telemetryClient)
+                                IHostApplicationLifetime hostApplicationLifetime,
+                                EventHubProducerClient producerClient,
+                                TelemetryClient telemetryClient)
     {
         _logger = logger;
 

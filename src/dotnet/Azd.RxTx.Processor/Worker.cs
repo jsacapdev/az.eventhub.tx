@@ -48,5 +48,4 @@ public class Worker : BackgroundService
 
         _logger.LogInformation("Worker took {ms} ms to stop.", stopWatch.ElapsedMilliseconds);
     }
-
 }

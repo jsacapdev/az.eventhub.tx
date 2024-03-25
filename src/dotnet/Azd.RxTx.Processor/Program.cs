@@ -17,8 +17,8 @@ public class Program
         builder.Services.AddSerilog(config =>
         {
             config.ReadFrom.Configuration(builder.Configuration);
-        });        
-
+        });
+        
         builder.Services.AddHostedService<Worker>();
         builder.Services.AddApplicationInsightsTelemetryWorkerService();
 
