@@ -19,12 +19,15 @@ public class MessageProcessor : IMessageProcessor<EventDataBatch>
 
     public void Initialize()
     {
-        var thread = new Thread(ProcessQueue)
+        for (int i = 0; i < 3; i++)
         {
-            // This is important as it allows the process to exit while this thread is running
-            IsBackground = true
-        };
-        thread.Start();
+            var thread = new Thread(ProcessQueue)
+            {
+                // This is important as it allows the process to exit while this thread is running
+                IsBackground = true
+            };
+            thread.Start();
+        }
 
         _logger.LogInformation($"Initialized MessageProcessor at: {DateTimeOffset.Now}");
     }
