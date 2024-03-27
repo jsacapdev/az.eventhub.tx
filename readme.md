@@ -10,7 +10,13 @@ The first [implementation](https://github.com/jsacapdev/az.eventhub.tx/tree/main
 
 The second [implementation](https://github.com/jsacapdev/az.eventhub.tx/tree/main/src/dotnet/Azd.RxTx.Processor.v2) uses a approach where getting messages is dependent on the interface implementation. The approach to processing messages uses an long running worker thread (long-running work in this context refers to a thread that's running for the lifetime of the application uploading messages in batch to Event Hub). Note that the approach is not to use a thread pool thread. Thread pool threads are by default not designed for this; they should complete quickly so they can be returned to the thread pool to be re-used for something else. So, the approach spawns a new thread manually to do long-running blocking work.
 
-Other general comments are logging is enabled to disk (Serilog) and to Application Insights. The supporting infrastructure is provisioned using Bicep. The deployment is manual at the moment (publish, zip, move, unzip, etc) and targets an Azure VM (that was created manually outside of the Bicep). The repository is currently hooked up to an Action (build, no deployment) and Sonar (see badges below).
+Other general comments are
+
+- Logging is enabled to disk (Serilog) and to Application Insights
+- Supporting infrastructure is provisioned using Bicep
+- Deployment is manual at the moment (publish, zip, move, unzip, etc) and targets an Azure VM (that was created manually outside of the Bicep)
+- Worker is deployed as a Windows Service.
+- Repository is currently hooked up to an Action (build, no deployment) and Sonar (see badges below)
 
 ## Build Status
 
