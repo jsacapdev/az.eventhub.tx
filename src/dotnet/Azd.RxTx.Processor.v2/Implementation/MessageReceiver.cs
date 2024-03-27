@@ -20,7 +20,7 @@ public class MessageReceiver : IMessageReceiver<MessageBatch<string>>
 
         List<string> messages = [];
 
-        for (int i = 0; i < 99; i++)
+        for (int i = 0; i < 100; i++)
         {
             messages.Add(JsonConvert.SerializeObject(new {Id = Guid.NewGuid().ToString(), Date = DateTimeOffset.UtcNow}));
         }
