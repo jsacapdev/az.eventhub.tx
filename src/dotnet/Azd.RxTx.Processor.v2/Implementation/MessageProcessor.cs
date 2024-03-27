@@ -3,16 +3,21 @@ using Azure.Messaging.EventHubs.Producer;
 
 namespace Azd.RxTx.Processor.v2;
 
-public class MessageProcessor : IMessageProcessor<EventDataBatch>
+public class MessageProcessor : IMessageProcessor<MessageBatch<string>>
 {
     private readonly ILogger<MessageProcessor> _logger;
 
-    private readonly BlockingCollection<EventDataBatch> _events = [];
+    private readonly IMessageSender<MessageBatch<string>> _sender;
+
+    private readonly BlockingCollection<MessageBatch<string>> _events = [];
 
     public MessageProcessor(ILogger<MessageProcessor> logger,
-                           IHostApplicationLifetime hostApplicationLifetime)
+                            IMessageSender<MessageBatch<string>> sender,
+                            IHostApplicationLifetime hostApplicationLifetime)
     {
         _logger = logger;
+
+        _sender = sender;
 
         hostApplicationLifetime.ApplicationStopped.Register(async () => await StopProcessing());
     }
@@ -21,33 +26,32 @@ public class MessageProcessor : IMessageProcessor<EventDataBatch>
     {
         for (int i = 0; i < 3; i++)
         {
-            var thread = new Thread(ProcessQueue)
-            {
-                // This is important as it allows the process to exit while this thread is running
-                IsBackground = true
-            };
-            thread.Start();
+            Task.Factory.StartNew(ProcessQueueAsync, TaskCreationOptions.LongRunning);
         }
 
         _logger.LogInformation($"Initialized MessageProcessor at: {DateTimeOffset.Now}");
     }
 
-    public void Enqueue(EventDataBatch eventDataBatch)
+    public void Enqueue(MessageBatch<string> eventDataBatch)
     {
         _events.Add(eventDataBatch);
     }
 
-    private void ProcessQueue()
+    private async Task ProcessQueueAsync()
     {
         foreach (var item in _events.GetConsumingEnumerable())
         {
-            ProcessItem(item);
+            await ProcessItemAsync(item);
         }
     }
 
-    private void ProcessItem(EventDataBatch eventBatch)
+    private async Task ProcessItemAsync(MessageBatch<string> eventBatch)
     {
-        _logger.LogInformation($"Processing item at: {DateTimeOffset.Now}");
+        _logger.LogInformation($"Processing item {eventBatch.Id} at: {DateTimeOffset.Now}");
+
+        await _sender.SendBatchAsync(eventBatch);
+
+        _logger.LogInformation($"Completed processing item {eventBatch.Id} at: {DateTimeOffset.Now}");
     }
 
     private async Task StopProcessing()

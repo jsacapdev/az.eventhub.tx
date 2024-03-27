@@ -1,48 +1,31 @@
-using System.Text;
-using Azure.Messaging.EventHubs;
-using Azure.Messaging.EventHubs.Producer;
+using Newtonsoft.Json;
 
 namespace Azd.RxTx.Processor.v2;
 
-public class MessageReceiver : IMessageReceiver<EventDataBatch>
+public class MessageReceiver : IMessageReceiver<MessageBatch<string>>
 {
     private readonly ILogger<MessageReceiver> _logger;
 
-    private readonly EventHubProducerClient _eventHubProducerClient;
-
     public MessageReceiver(ILogger<MessageReceiver> logger,
-                           IHostApplicationLifetime hostApplicationLifetime,
-                           EventHubProducerClient producerClient)
+                           IHostApplicationLifetime hostApplicationLifetime)
     {
         _logger = logger;
-
-        _eventHubProducerClient = producerClient;
 
         hostApplicationLifetime.ApplicationStopped.Register(() => StopReceiving());
     }
 
-    public async Task<EventDataBatch> GetMessageBatch()
+    public async Task<MessageBatch<string>> GetMessageBatch()
     {
-        using EventDataBatch eventBatch = await _eventHubProducerClient.CreateBatchAsync();
+        await Task.Run(() => {});
 
         List<string> messages = [];
 
-        // create 99 versions of the item that came down in the message
         for (int i = 0; i < 99; i++)
         {
-            messages.Add("body");
+            messages.Add(JsonConvert.SerializeObject(new {Id = Guid.NewGuid().ToString(), Date = DateTimeOffset.UtcNow}));
         }
 
-        foreach (var message in messages)
-        {
-            if (!eventBatch.TryAdd(new EventData(Encoding.UTF8.GetBytes(message))))
-            {
-                // if it is too large for the batch
-                throw new Exception($"Event {message} is too large for the batch and cannot be sent.");
-            }
-        }
-
-        return eventBatch;
+        return new MessageBatch<string>(messages);
     }
 
     private void StopReceiving()

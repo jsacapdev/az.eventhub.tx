@@ -7,13 +7,13 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
 
-    private readonly IMessageProcessor<EventDataBatch> _processor;
+    private readonly IMessageProcessor<MessageBatch<string>> _processor;
 
-    private readonly IMessageReceiver<EventDataBatch> _receiver;
+    private readonly IMessageReceiver<MessageBatch<string>> _receiver;
 
     public Worker(ILogger<Worker> logger, 
-                  IMessageReceiver<EventDataBatch> receiver, 
-                  IMessageProcessor<EventDataBatch> processor)
+                  IMessageReceiver<MessageBatch<string>> receiver, 
+                  IMessageProcessor<MessageBatch<string>> processor)
     {
         _logger = logger;
 
@@ -44,7 +44,7 @@ public class Worker : BackgroundService
 
             _processor.Enqueue(batch);
 
-            await Task.Delay(10000, stoppingToken);
+            await Task.Delay(30000, stoppingToken);
         }
     }
 

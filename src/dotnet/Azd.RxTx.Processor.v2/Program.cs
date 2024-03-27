@@ -1,4 +1,3 @@
-using Azure.Messaging.EventHubs.Producer;
 using Microsoft.Extensions.Azure;
 using Serilog;
 
@@ -23,8 +22,9 @@ public class Program
         builder.Services.AddHostedService<Worker>();
         builder.Services.AddApplicationInsightsTelemetryWorkerService();
 
-        builder.Services.AddSingleton<IMessageReceiver<EventDataBatch>, MessageReceiver>();
-        builder.Services.AddSingleton<IMessageProcessor<EventDataBatch>, MessageProcessor>();
+        builder.Services.AddSingleton<IMessageReceiver<MessageBatch<string>>, MessageReceiver>();
+        builder.Services.AddSingleton<IMessageProcessor<MessageBatch<string>>, MessageProcessor>();
+        builder.Services.AddSingleton<IMessageSender<MessageBatch<string>>, EventHubMessageSender>();
 
         builder.Services.AddAzureClients(clientBuilder =>
         {
