@@ -1,6 +1,6 @@
 using Azure.Identity;
+using Azure.Messaging.EventHubs.Producer;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.Azure;
 using Serilog;
 
 namespace Azd.RxTx.Processor.v2;
@@ -29,16 +29,14 @@ public class Program
         builder.Services.AddSingleton<IMessageProcessor<MessageBatch<string>>, MessageProcessor>();
         builder.Services.AddSingleton<IMessageSender<MessageBatch<string>>, EventHubMessageSender>();
 
-        if (builder.Environment.IsProduction())
-        {
-            builder.Configuration.AddAzureKeyVault(new Uri($"https://{builder.Configuration["KeyVaultName"]}.vault.azure.net/"),
-                new DefaultAzureCredential());
-        }
+        builder.Configuration.AddAzureKeyVault(new Uri($"https://{builder.Configuration["KeyVaultName"]}.vault.azure.net/"),
+            new DefaultAzureCredential());
 
-        builder.Services.AddAzureClients(clientBuilder =>
+        builder.Services.AddSingleton((sp) =>
         {
-            clientBuilder.AddEventHubProducerClient(builder.Configuration["EventHubConnectionString"],
-                                                    builder.Configuration["EventHubName"]);
+            return new EventHubProducerClient(builder.Configuration["EventHubNamespaceName"],
+                                              builder.Configuration["EventHubName"],
+                                              new DefaultAzureCredential());
         });
 
         var host = builder.Build();
