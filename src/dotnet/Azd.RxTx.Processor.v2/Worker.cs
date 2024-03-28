@@ -44,7 +44,7 @@ public class Worker : BackgroundService
 
             _processor.Enqueue(batch);
 
-            await Task.Delay(500, stoppingToken);
+            await Task.Delay(200, stoppingToken);
         }
     }
 
