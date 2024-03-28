@@ -1,3 +1,5 @@
+using Azure.Identity;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Azure;
 using Serilog;
 
@@ -11,7 +13,7 @@ public class Program
 
         builder.Services.AddWindowsService(options =>
         {
-            options.ServiceName = "RxTx Service";
+            options.ServiceName = "RxTx v2 Service";
         });
 
         builder.Services.AddSerilog(config =>
@@ -21,15 +23,22 @@ public class Program
 
         builder.Services.AddHostedService<Worker>();
         builder.Services.AddApplicationInsightsTelemetryWorkerService();
+        builder.Services.AddSingleton<ITelemetryInitializer, AzdRxTxProcessorTelemetryInitializer>();
 
         builder.Services.AddSingleton<IMessageReceiver<MessageBatch<string>>, MessageReceiver>();
         builder.Services.AddSingleton<IMessageProcessor<MessageBatch<string>>, MessageProcessor>();
         builder.Services.AddSingleton<IMessageSender<MessageBatch<string>>, EventHubMessageSender>();
 
+        if (builder.Environment.IsProduction())
+        {
+            builder.Configuration.AddAzureKeyVault(new Uri($"https://{builder.Configuration["KeyVaultName"]}.vault.azure.net/"),
+                new DefaultAzureCredential());
+        }
+
         builder.Services.AddAzureClients(clientBuilder =>
         {
-            clientBuilder.AddEventHubProducerClient(Environment.GetEnvironmentVariable("EventHubConnectionString"),
-                                                    Environment.GetEnvironmentVariable("EventHubName"));
+            clientBuilder.AddEventHubProducerClient(builder.Configuration["EventHubConnectionString"],
+                                                    builder.Configuration["EventHubName"]);
         });
 
         var host = builder.Build();

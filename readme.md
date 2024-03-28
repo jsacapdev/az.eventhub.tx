@@ -55,7 +55,7 @@ Other general comments are:
 
 ### Publish the Windows Service
 
-`dotnet publish -o d:/Azd.RxTx.Processor/`
+`dotnet publish -o d:/deploy/`
 
 `sc.exe create "Azd RxTx Service" binpath="C:\Program Files\Azd.RxTx.Processor\Azd.RxTx.Processor.exe"`
 

@@ -1,3 +1,5 @@
+param eventHubNamespaceName string 
+
 @description('Specifies a project name that is used to generate the Event Hub name and the Namespace name.')
 param eventHubName string
 
@@ -12,8 +14,6 @@ param tags object = {}
   'Standard'
 ])
 param eventHubSku string = 'Standard'
-
-param eventHubNamespaceName string 
 
 resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview' = {
   name: eventHubNamespaceName
@@ -36,6 +36,16 @@ resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2023-01-01-preview' =
   properties: {
     messageRetentionInDays: 1
     partitionCount: 1
+  }
+}
+
+resource eventHubProducerAuthorizationRules 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2023-01-01-preview' = {
+  parent: eventHub
+  name: 'Producer'
+  properties: {
+    rights: [
+      'Send'
+    ]
   }
 }
 

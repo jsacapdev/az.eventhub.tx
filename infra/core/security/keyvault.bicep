@@ -3,11 +3,21 @@ param location string = resourceGroup().location
 param tags object = {}
 
 @secure()
-param principalId string = ''
+param principalId string
+
+@secure()
+param vmPrincipalId string
 
 @secure()
 param applicationInsightsConnectionString string
 
+param eventHubNamespaceName string 
+
+param eventHubName string
+
+resource eventHubProducerAuthorizationRules 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2023-01-01-preview' existing = {
+  name: '${eventHubNamespaceName}/${eventHubName}/Producer'
+}
 
 resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: name
@@ -22,15 +32,35 @@ resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
         permissions: { secrets: [ 'all' ] }
         tenantId: subscription().tenantId
       }
+      {
+        objectId: vmPrincipalId
+        permissions: { secrets: [ 'get', 'list' ] }
+        tenantId: subscription().tenantId
+      }
     ] : []
   }
 }
 
-resource sonarSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+resource applicationInsightsConnectionSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   parent: keyVault
-  name: 'applicationInsightsConnectionString'
+  name: 'ApplicationInsightsConnectionString'
   properties: {
     value: applicationInsightsConnectionString
+  }
+}
+
+resource eventHubConnectionStringSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'EventHubConnectionString'
+  properties: {
+    value: eventHubProducerAuthorizationRules.listKeys().primaryConnectionString
+  }
+}
+resource eventHubNameSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'EventHubName'
+  properties: {
+    value: eventHubName
   }
 }
 

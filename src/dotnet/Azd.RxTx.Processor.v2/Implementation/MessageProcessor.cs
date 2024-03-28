@@ -1,5 +1,5 @@
 using System.Collections.Concurrent;
-using Azure.Messaging.EventHubs.Producer;
+using Microsoft.ApplicationInsights;
 
 namespace Azd.RxTx.Processor.v2;
 
@@ -9,22 +9,27 @@ public class MessageProcessor : IMessageProcessor<MessageBatch<string>>
 
     private readonly IMessageSender<MessageBatch<string>> _sender;
 
+    private readonly TelemetryClient _telemetryClient;
+
     private readonly BlockingCollection<MessageBatch<string>> _events = [];
 
     public MessageProcessor(ILogger<MessageProcessor> logger,
                             IMessageSender<MessageBatch<string>> sender,
-                            IHostApplicationLifetime hostApplicationLifetime)
+                            IHostApplicationLifetime hostApplicationLifetime,
+                            TelemetryClient telemetryClient)
     {
         _logger = logger;
 
         _sender = sender;
+
+        _telemetryClient = telemetryClient;
 
         hostApplicationLifetime.ApplicationStopped.Register(async () => await StopProcessing());
     }
 
     public void Initialize()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             Task.Factory.StartNew(ProcessQueueAsync, TaskCreationOptions.LongRunning);
         }
@@ -47,11 +52,9 @@ public class MessageProcessor : IMessageProcessor<MessageBatch<string>>
 
     private async Task ProcessItemAsync(MessageBatch<string> eventBatch)
     {
-        _logger.LogInformation($"Processing item {eventBatch.Id} at: {DateTimeOffset.Now}");
-
         await _sender.SendBatchAsync(eventBatch);
 
-        _logger.LogInformation($"Completed processing item {eventBatch.Id} at: {DateTimeOffset.Now}");
+        _telemetryClient.TrackTrace(_logger, $"Completed processing item {eventBatch.Id} at: {DateTimeOffset.Now}");
     }
 
     private async Task StopProcessing()

@@ -18,6 +18,10 @@ param location string
 @description('Id of the user or app to assign application roles')
 param principalId string
 
+@secure()
+@description('Id of the user or app to assign application roles')
+param vmPrincipalId string
+
 var abbrs = loadJsonContent('./abbreviations.json')
 
 // Tags that should be applied to all resources.
@@ -55,7 +59,10 @@ module keyVault './core/security/keyvault.bicep' = {
     location: location
     tags: tags
     principalId: principalId
+    vmPrincipalId: vmPrincipalId
     applicationInsightsConnectionString: monitoring.outputs.applicationInsightsConnectionString
+    eventHubNamespaceName: eventHubNamespaceName
+    eventHubName: eventHubName
   }
 }
 

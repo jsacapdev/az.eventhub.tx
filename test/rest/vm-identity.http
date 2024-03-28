@@ -1,0 +1,13 @@
+@keyvault = https://kv-azd5-dev-001.vault.azure.net
+
+@accessToken = {{login.response.body.$.access_token}}
+
+###
+
+# @name login 
+GET http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://vault.azure.net HTTP/1.1
+Metadata: true
+
+###
+GET {{keyvault}}/secrets/applicationInsightsConnectionString?api-version=2016-10-01 HTTP/1.1
+Authorization: Bearer {{accessToken}}
