@@ -1,6 +1,12 @@
 @keyvault = https://kv-azd5-dev-001.vault.azure.net
 
+@eventHubNamespace = evhns-azd5-dev-001
+
+@eventHub = evh-azd5-dev-001
+
 @kvAccessToken = {{kvlogin.response.body.$.access_token}}
+
+@ehAccessToken = {{ehlogin.response.body.$.access_token}}
 
 ###
 
@@ -17,3 +23,13 @@ Authorization: Bearer {{kvAccessToken}}
 # @name ehlogin 
 GET http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https://eventhubs.azure.net HTTP/1.1
 Metadata: true
+
+###
+POST https://{{eventHubNamespace}}.servicebus.windows.net/{{eventHub}}/messages HTTP/1.1
+Authorization: Bearer {{ehAccessToken}}
+Content-Type: application/atom+xml;type=entry;charset=utf-8 
+
+{ 
+    "DeviceId":"dev-01", 
+    "Temperature":"37.0" 
+}
