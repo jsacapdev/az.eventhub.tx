@@ -16,6 +16,7 @@ public class MessageProcessor : IMessageProcessor<MessageBatch<string>>
     public MessageProcessor(ILogger<MessageProcessor> logger,
                             IMessageSender<MessageBatch<string>> sender,
                             IHostApplicationLifetime hostApplicationLifetime,
+                            IConfiguration configuration,
                             TelemetryClient telemetryClient)
     {
         _logger = logger;
@@ -23,6 +24,8 @@ public class MessageProcessor : IMessageProcessor<MessageBatch<string>>
         _sender = sender;
 
         _telemetryClient = telemetryClient;
+
+        var threadCount = configuration["MessageProcessorThreadCount"];
 
         hostApplicationLifetime.ApplicationStopped.Register(async () => await StopProcessing());
     }

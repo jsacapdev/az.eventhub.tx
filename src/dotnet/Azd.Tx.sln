@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.RxTx.Processor.Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.RxTx.Processor.v2", "Azd.RxTx.Processor.v2\Azd.RxTx.Processor.v2.csproj", "{85117DF8-44CE-4D73-9C76-7655BD83BD94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azd.RxTx.Processor.v2.Tests", "tests\Azd.RxTx.Processor.v2.Tests\Azd.RxTx.Processor.v2.Tests.csproj", "{3C526871-ECF3-4F60-B5C8-899D00371089}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,8 +34,13 @@ Global
 		{85117DF8-44CE-4D73-9C76-7655BD83BD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85117DF8-44CE-4D73-9C76-7655BD83BD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85117DF8-44CE-4D73-9C76-7655BD83BD94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C526871-ECF3-4F60-B5C8-899D00371089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C526871-ECF3-4F60-B5C8-899D00371089}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C526871-ECF3-4F60-B5C8-899D00371089}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C526871-ECF3-4F60-B5C8-899D00371089}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5C14AB51-50E7-4A6B-B07F-C011A6ED09A8} = {2DBA5857-1FCC-4FC9-981F-ACB7254AE6CE}
+		{3C526871-ECF3-4F60-B5C8-899D00371089} = {2DBA5857-1FCC-4FC9-981F-ACB7254AE6CE}
 	EndGlobalSection
 EndGlobal
