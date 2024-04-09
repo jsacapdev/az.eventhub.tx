@@ -1,6 +1,7 @@
 using System.Text;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
+using Microsoft.ApplicationInsights;
 
 namespace Azd.RxTx.Processor.v2;
 
@@ -10,15 +11,24 @@ public class EventHubMessageSender : IMessageSender<MessageBatch<string>>
 
     private readonly EventHubProducerClient _eventHubProducerClient;
 
+    private readonly IHostApplicationLifetime _hostApplicationLifetime;
+
+    private readonly TelemetryClient _telemetryClient;
+
     public EventHubMessageSender(ILogger<EventHubMessageSender> logger,
                                 IHostApplicationLifetime hostApplicationLifetime,
-                                EventHubProducerClient producerClient)
+                                EventHubProducerClient producerClient,
+                                TelemetryClient telemetryClient)
     {
         _logger = logger;
 
         _eventHubProducerClient = producerClient;
 
-        hostApplicationLifetime.ApplicationStopped.Register(async () => await StopSending());
+        _hostApplicationLifetime = hostApplicationLifetime;
+
+        _hostApplicationLifetime.ApplicationStopped.Register(async () => await StopSending());
+
+        _telemetryClient = telemetryClient;
     }
 
     public async Task SendBatchAsync(MessageBatch<string> batch)
@@ -34,7 +44,16 @@ public class EventHubMessageSender : IMessageSender<MessageBatch<string>>
             }
         }
 
-        await _eventHubProducerClient.SendAsync(eventBatch);
+        try
+        {
+            await _eventHubProducerClient.SendAsync(eventBatch);
+        }
+        catch (Exception ex)
+        {
+            _telemetryClient.TrackException(_logger, ex);
+
+            _hostApplicationLifetime.StopApplication();
+        }
     }
 
     private async Task StopSending()

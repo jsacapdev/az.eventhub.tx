@@ -32,7 +32,7 @@ public class MessageProcessor : IMessageProcessor<MessageBatch<string>>
             throw new ArgumentNullException("MessageProcessorThreadCount is not set in configuration.");
         }
 
-        hostApplicationLifetime.ApplicationStopped.Register(async () => await StopProcessing());
+        hostApplicationLifetime.ApplicationStopped.Register(() => StopProcessing());
     }
 
     public void Initialize()
@@ -65,10 +65,8 @@ public class MessageProcessor : IMessageProcessor<MessageBatch<string>>
         _telemetryClient.TrackTrace(_logger, $"Completed processing item {eventBatch.Id} at: {DateTimeOffset.Now}");
     }
 
-    private async Task StopProcessing()
+    private void StopProcessing()
     {
-        await Task.Run(() => { });
-
         _events.CompleteAdding();
 
         _logger.LogInformation($"MessageProcessor stopped processing at: {DateTimeOffset.Now}");
