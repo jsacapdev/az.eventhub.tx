@@ -29,8 +29,11 @@ public class Program
         builder.Services.AddSingleton<IMessageProcessor<MessageBatch<string>>, MessageProcessor>();
         builder.Services.AddSingleton<IMessageSender<MessageBatch<string>>, EventHubMessageSender>();
 
-        builder.Configuration.AddAzureKeyVault(new Uri($"https://{builder.Configuration["KeyVaultName"]}.vault.azure.net/"),
-            new DefaultAzureCredential());
+        if (builder.Environment.IsProduction())
+        {
+            builder.Configuration.AddAzureKeyVault(new Uri($"https://{builder.Configuration["KeyVaultName"]}.vault.azure.net/"),
+                new DefaultAzureCredential());
+        }
 
         builder.Services.AddAzureClients(clientBuilder =>
         {

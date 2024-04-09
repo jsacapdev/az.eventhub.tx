@@ -13,6 +13,8 @@ public class MessageProcessor : IMessageProcessor<MessageBatch<string>>
 
     private readonly BlockingCollection<MessageBatch<string>> _events = [];
 
+    private readonly int _threadCount;
+
     public MessageProcessor(ILogger<MessageProcessor> logger,
                             IMessageSender<MessageBatch<string>> sender,
                             IHostApplicationLifetime hostApplicationLifetime,
@@ -25,14 +27,17 @@ public class MessageProcessor : IMessageProcessor<MessageBatch<string>>
 
         _telemetryClient = telemetryClient;
 
-        var threadCount = configuration["MessageProcessorThreadCount"];
+        if (!int.TryParse(configuration["MessageProcessorThreadCount"], out _threadCount))
+        {
+            throw new ArgumentNullException("MessageProcessorThreadCount is not set in configuration.");
+        }
 
         hostApplicationLifetime.ApplicationStopped.Register(async () => await StopProcessing());
     }
 
     public void Initialize()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < _threadCount; i++)
         {
             Task.Factory.StartNew(ProcessQueueAsync, TaskCreationOptions.LongRunning);
         }
